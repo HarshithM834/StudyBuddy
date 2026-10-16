@@ -1,0 +1,90 @@
+{
+  "retrieved_date": "2026-10-15",
+  "date_timezone": "America/New_York",
+  "method": "Official public sources through the environment proxy; no logins or paid research services",
+  "verified_files": [
+    {
+      "id": "open-notebook-README.md",
+      "url": "https://raw.githubusercontent.com/lfnovo/open-notebook/a0f6f3081ae06328f0a451b3a3ef2959ca25721d/README.md",
+      "sha256": "fcc617f7254885020d9d04a8c4b5702eed907903cf5a860cda16f37ec0e4ad74",
+      "matches_reviewed_file": true
+    },
+    {
+      "id": "open-notebook-LICENSE",
+      "url": "https://raw.githubusercontent.com/lfnovo/open-notebook/a0f6f3081ae06328f0a451b3a3ef2959ca25721d/LICENSE",
+      "sha256": "5262176eef0dc9e46c8825249000585f115b7ef5fab500bf1f530717bf2ce0b9",
+      "matches_reviewed_file": true
+    },
+    {
+      "id": "anythingllm-README.md",
+      "url": "https://raw.githubusercontent.com/Mintplex-Labs/anything-llm/7cbea8025211f7e7ead3701979157bd0d0e1f140/README.md",
+      "sha256": "b45f3de338822a8f748a05351cacc8f2562074e2ad6060d7ad35f22dfb7f41a4",
+      "matches_reviewed_file": true
+    },
+    {
+      "id": "anythingllm-LICENSE",
+      "url": "https://raw.githubusercontent.com/Mintplex-Labs/anything-llm/7cbea8025211f7e7ead3701979157bd0d0e1f140/LICENSE",
+      "sha256": "782d2dc18a1ed9028ca992520f42b2e0b6187807da0d14455b8ae608e2e5692e",
+      "matches_reviewed_file": true
+    }
+  ],
+  "repository_metrics": [
+    {
+      "repository": "lfnovo/open-notebook",
+      "url": "https://github.com/lfnovo/open-notebook",
+      "observed_date": "2026-10-15",
+      "stars": 40218,
+      "forks": 4658,
+      "html_sha256": "d355b02101cb4840ccd4b78aa78b305e01764db210c1317aa454ad52d244d90e",
+      "meaning": "Repository activity indicators; not users or market share"
+    },
+    {
+      "repository": "Mintplex-Labs/anything-llm",
+      "url": "https://github.com/Mintplex-Labs/anything-llm",
+      "observed_date": "2026-10-15",
+      "stars": 67148,
+      "forks": 7506,
+      "html_sha256": "3f906a205744c2d145e5771238a78ad900330d41ba3c09420fc460802121e357",
+      "meaning": "Repository activity indicators; not users or market share"
+    }
+  ],
+  "blocked_sources": [
+    {
+      "url": "https://openai.com/index/chatgpt-study-mode/",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://chatgpt.com/pricing/",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://notebooklm.google/",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://www.studyfetch.com/",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://knowt.com/",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://www.remnote.com/pricing",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://quizlet.com/features",
+      "status": "blocked",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "commercial_current_pricing_verified": false,
+  "target_market_share_established": false
+}

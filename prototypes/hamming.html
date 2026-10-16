@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StudyBuddy · Find the flipped bit</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #20342f; background: #f2f5ef; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 920px; margin: auto; padding: 36px 24px 64px; }
+    .brand, .eyebrow { font-size: 12px; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; color: #496b5d; }
+    header { margin: 32px 0 24px; }
+    h1 { font-size: clamp(28px, 5vw, 44px); letter-spacing: -.04em; line-height: 1.12; margin: 12px 0 16px; max-width: 680px; }
+    h2 { font-size: 26px; letter-spacing: -.025em; margin: 8px 0 16px; }
+    h3 { font-size: 17px; }
+    p, li { line-height: 1.65; }
+    .muted { color: #53655e; }
+    .small { font-size: 13px; }
+    nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 24px 0; }
+    button { font: inherit; border-radius: 10px; border: 1px solid #b9c9bc; padding: 12px 16px; background: white; color: inherit; cursor: pointer; }
+    button:hover { background: #eaf1e9; }
+    button:focus-visible { outline: 3px solid #c36e14; outline-offset: 3px; }
+    nav button { font-size: 13px; padding: 12px 8px; }
+    nav button[aria-current="step"], .primary { background: #185843; color: white; border-color: #185843; }
+    .primary:hover { background: #104331; }
+    article { padding: clamp(20px, 4vw, 36px); background: #fff; border: 1px solid #dae3d6; border-radius: 20px; box-shadow: 0 8px 40px #233e2e06; }
+    [hidden] { display: none !important; }
+    .bits { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0; }
+    .bit { min-width: 64px; display: grid; place-items: center; gap: 8px; padding: 14px 12px; background: #eaf3ec; border: 1px solid #c6d9cb; border-radius: 10px; }
+    .bit .label { font-size: 13px; font-weight: 650; }
+    .bit .value { font: 700 30px ui-monospace, monospace; }
+    .bit.check { background: #eef0fa; border-color: #d2d8ed; }
+    .bit.flipped { background: #fff0da; border: 2px solid #9c5a12; }
+    .bit .state { font-size: 10px; min-height: 14px; }
+    .callout { background: #f1f6ef; border-left: 3px solid #608a69; padding: 14px 18px; border-radius: 0 10px 10px 0; line-height: 1.65; margin: 20px 0; }
+    .math { font-family: ui-monospace, monospace; white-space: nowrap; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+    th, td { padding: 14px 10px; border-bottom: 1px solid #dfe7dd; text-align: left; line-height: 1.5; }
+    th { color: #53655e; font-size: 12px; }
+    .table-wrap { overflow-x: auto; }
+    .pass { color: #17653f; font-weight: 700; }
+    .fail { color: #a33d12; font-weight: 700; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 24px; }
+    .actions .hint { font-size: 12px; color: #53655e; }
+    .quiz { margin-top: 30px; border-top: 1px solid #dfe7dd; padding-top: 20px; }
+    .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .choices button { min-width: 42px; }
+    #feedback { min-height: 52px; }
+    footer { margin-top: 20px; color: #53655e; font-size: 12px; line-height: 1.7; }
+    @media (max-width: 560px) {
+      main { padding: 24px 14px 40px; }
+      nav { grid-template-columns: repeat(2, 1fr); }
+      .bits { gap: 6px; }
+      .bit { min-width: 52px; padding: 12px 8px; }
+      th, td { padding: 10px 6px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <div class="brand">StudyBuddy / Guided lesson</div>
+  <header>
+    <div class="eyebrow">CYSE 425 · Hamming (7,4)</div>
+    <h1>How three checks find one flipped bit.</h1>
+    <p class="muted">Follow the exact <strong>ABCD | XYZ</strong> layout from your lecture, one step at a time.</p>
+  </header>
+  <nav aria-label="Lesson steps">
+    <button type="button" data-step="0" aria-current="step">1. The message</button>
+    <button type="button" data-step="1">2. Add checks</button>
+    <button type="button" data-step="2">3. Flip a bit</button>
+    <button type="button" data-step="3">4. Find it</button>
+  </nav>
+
+  <article id="step-0" aria-labelledby="title-0">
+    <div class="eyebrow">Step 1 of 4</div>
+    <h2 id="title-0" tabindex="-1">We want to send four bits: 1101.</h2>
+    <p>A bit is a 0 or a 1. The slide names the four message positions <strong>A, B, C, D</strong>.</p>
+    <div class="bits" aria-label="Message: A is 1, B is 1, C is 0, D is 1">
+      <div class="bit"><span class="label">A</span><span class="value">1</span></div>
+      <div class="bit"><span class="label">B</span><span class="value">1</span></div>
+      <div class="bit"><span class="label">C</span><span class="value">0</span></div>
+      <div class="bit"><span class="label">D</span><span class="value">1</span></div>
+    </div>
+    <p>Suppose noise changes C from 0 to 1. The receiver gets <span class="math">1111</span>. That looks like a perfectly possible message. How could it know something changed?</p>
+    <div class="callout">Send extra information that lets the receiver check the message. Hamming (7,4) adds <strong>three check bits</strong>: four message bits + three checks = seven transmitted bits.</div>
+    <p class="small muted">This lesson assumes at most one of those seven bits changes during transmission. Ordinary Hamming (7,4) cannot reliably correct two flipped bits.</p>
+    <div class="actions"><button class="primary" type="button" data-next="1">Show me the three checks →</button></div>
+  </article>
+
+  <article id="step-1" aria-labelledby="title-1" hidden>
+    <div class="eyebrow">Step 2 of 4</div>
+    <h2 id="title-1" tabindex="-1">Each check looks at a different group.</h2>
+    <p>The symbol <strong>⊕</strong> means XOR. For these groups, count the 1s: an <strong>odd</strong> count gives 1; an <strong>even</strong> count gives 0.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Check</th><th>Message bits it uses</th><th>With ABCD = 1101</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td><strong>X</strong></td><td>A, B, D</td><td>1 ⊕ 1 ⊕ 1 → three 1s</td><td>1</td></tr>
+        <tr><td><strong>Y</strong></td><td>A, C, D</td><td>1 ⊕ 0 ⊕ 1 → two 1s</td><td>0</td></tr>
+        <tr><td><strong>Z</strong></td><td>B, C, D</td><td>1 ⊕ 0 ⊕ 1 → two 1s</td><td>0</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">We send <strong class="math">1101 | 100</strong>.<br>The first four bits carry the message. The last three carry the results of our checks.</div>
+    <p>The groups are chosen so each bit has a unique pattern of checks. That pattern will let us locate a single error.</p>
+    <div class="actions"><button class="primary" type="button" data-next="2">Let one bit change →</button></div>
+  </article>
+
+  <article id="step-2" aria-labelledby="title-2" hidden>
+    <div class="eyebrow">Step 3 of 4</div>
+    <h2 id="title-2" tabindex="-1">Now let noise change one bit.</h2>
+    <p>Start with the slide’s example: C changes from 0 to 1. You can select a different bit below. Each selection starts from the original packet, so only one bit changes at a time.</p>
+    <p class="small muted">Sent in our demonstration: <strong class="math">1101 | 100</strong>. The receiver is not given this original to compare against.</p>
+    <h3>Received packet</h3>
+    <div id="received-bits" class="bits" aria-label="Choose one transmitted bit to flip"></div>
+    <p id="change-summary" aria-live="polite"></p>
+    <div class="actions">
+      <button type="button" id="reset-example">Use the slide’s C error</button>
+      <button type="button" id="no-error">Try no error</button>
+    </div>
+    <div class="callout">The receiver can recompute X, Y, and Z from the four received message bits, then compare those results with the three received check bits.</div>
+    <div class="actions"><button class="primary" type="button" data-next="3">See which checks disagree →</button></div>
+  </article>
+
+  <article id="step-3" aria-labelledby="title-3" hidden>
+    <div class="eyebrow">Step 4 of 4</div>
+    <h2 id="title-3" tabindex="-1">The pattern of failed checks points to a bit.</h2>
+    <p>Using only the received packet: <strong id="received-code" class="math"></strong></p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Check</th><th>Recalculate from received data</th><th>Received check bit</th><th>Comparison</th></tr></thead>
+      <tbody id="check-rows"></tbody>
+    </table></div>
+    <div id="diagnosis" class="callout" aria-live="polite"></div>
+    <p id="correction"></p>
+    <details>
+      <summary>See all seven single-bit error patterns</summary>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Changed bit</th><th>Checks that fail</th></tr></thead>
+        <tbody><tr><td>A</td><td>X and Y</td></tr><tr><td>B</td><td>X and Z</td></tr><tr><td>C</td><td>Y and Z</td></tr><tr><td>D</td><td>X, Y, and Z</td></tr><tr><td>X</td><td>X only</td></tr><tr><td>Y</td><td>Y only</td></tr><tr><td>Z</td><td>Z only</td></tr></tbody>
+      </table></div>
+    </details>
+    <div class="quiz">
+      <h3>Try one new case</h3>
+      <p>Assume exactly one bit changed. This time <strong>all three checks fail</strong>. Which bit would you flip back?</p>
+      <div class="choices" id="quiz-choices" role="group" aria-label="Which bit changed?"></div>
+      <p id="feedback" role="status"></p>
+    </div>
+    <div class="actions"><button type="button" data-next="2">← Try another flipped bit</button></div>
+  </article>
+  <footer>
+    Source: CYSE 425 Week 6, PDF pages 21–23 (printed slide numbers 28–30).<br>
+    This is a guided interaction prototype with fixed explanations, not a live AI tutor. The example and parity rules follow the uploaded deck. Other teaching sources may arrange the same code’s bit positions differently.
+  </footer>
+</main>
+<script>
+  'use strict';
+  const labels = ['A','B','C','D','X','Y','Z'];
+  const sent = [1,1,0,1,1,0,0];
+  const groups = [[0,1,3],[0,2,3],[1,2,3]];
+  const errorBySyndrome = {'110':0,'101':1,'011':2,'111':3,'100':4,'010':5,'001':6};
+  let flipped = 2;
+  function format(bits) { return bits.slice(0,4).join('') + ' | ' + bits.slice(4).join(''); }
+  function getReceived() { return sent.map((bit,index) => bit ^ Number(index === flipped)); }
+  function showStep(step) {
+    document.querySelectorAll('article').forEach((section,index) => section.hidden = index !== step);
+    document.querySelectorAll('nav button').forEach((button,index) => {
+      if (index === step) button.setAttribute('aria-current','step');
+      else button.removeAttribute('aria-current');
+    });
+    document.getElementById('title-' + step).focus({preventScroll: true});
+  }
+  function render() {
+    const received = getReceived();
+    const container = document.getElementById('received-bits');
+    container.replaceChildren();
+    received.forEach((value,index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'bit' + (index > 3 ? ' check' : '') + (index === flipped ? ' flipped' : '');
+      button.dataset.bit = labels[index];
+      button.setAttribute('aria-pressed', String(index === flipped));
+      button.setAttribute('aria-label', 'Flip bit ' + labels[index] + '; current received value ' + value);
+      button.innerHTML = '<span class="label">' + labels[index] + '</span><span class="value">' + value + '</span><span class="state">' + (index === flipped ? 'FLIPPED' : 'unchanged') + '</span>';
+      button.addEventListener('click', () => {
+        flipped = index;
+        render();
+        document.querySelector('[data-bit="' + labels[index] + '"]').focus();
+      });
+      container.append(button);
+    });
+    document.getElementById('change-summary').textContent = flipped === null
+      ? 'No bit changed. Received: ' + format(received)
+      : labels[flipped] + ' changed from ' + sent[flipped] + ' to ' + received[flipped] + '. Received: ' + format(received);
+    document.getElementById('received-code').textContent = format(received);
+    const recalculated = groups.map(group => group.reduce((value,index) => value ^ received[index], 0));
+    const failed = recalculated.map((value,index) => value !== received[index+4]);
+    document.getElementById('check-rows').innerHTML = groups.map((group,index) => '<tr><td><strong>' + labels[index+4] + '</strong></td><td>' + group.map(i => received[i]).join(' ⊕ ') + ' = ' + recalculated[index] + '</td><td>' + received[index+4] + '</td><td class="' + (failed[index] ? 'fail' : 'pass') + '">' + (failed[index] ? 'Fail — different' : 'Pass — equal') + '</td></tr>').join('');
+    const syndrome = failed.map(Number).join('');
+    const identified = errorBySyndrome[syndrome];
+    const diagnosis = document.getElementById('diagnosis');
+    const correction = document.getElementById('correction');
+    if (syndrome === '000') {
+      diagnosis.textContent = 'All three checks agree. Under our at-most-one-error assumption, no correction is needed.';
+      correction.textContent = 'Message: ' + received.slice(0,4).join('');
+    } else {
+      const names = failed.flatMap((isFailed,index) => isFailed ? [labels[index+4]] : []);
+      let reason;
+      if (identified === 2) reason = 'Both Y and Z involve C and D. But X also involves D, and X passed. A single change to D would fail all three checks. That leaves C.';
+      else if (identified === 0) reason = 'A participates in X and Y, but not Z. D also participates in X and Y, but changing D would fail Z too. This pattern identifies A.';
+      else if (identified === 1) reason = 'B participates in X and Z, but not Y. D also participates in X and Z, but changing D would fail Y too. This pattern identifies B.';
+      else if (identified === 3) reason = 'D is the only bit that participates in all three checks. One flipped D makes all three fail.';
+      else reason = 'Only the ' + labels[identified] + ' check fails. Every message bit participates in at least two checks, so a single message-bit error would fail more than one check. The check bit ' + labels[identified] + ' itself changed.';
+      diagnosis.textContent = names.join(' and ') + ' fail. ' + reason;
+      const corrected = received.slice();
+      corrected[identified] ^= 1;
+      correction.textContent = 'Flip ' + labels[identified] + ' back: ' + format(corrected) + '. Recovered message: ' + corrected.slice(0,4).join('') + '.';
+    }
+  }
+  document.querySelectorAll('[data-step]').forEach(button => button.addEventListener('click', () => showStep(Number(button.dataset.step))));
+  document.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', () => showStep(Number(button.dataset.next))));
+  document.getElementById('reset-example').addEventListener('click', () => { flipped = 2; render(); });
+  document.getElementById('no-error').addEventListener('click', () => { flipped = null; render(); });
+  labels.forEach(label => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = label;
+    button.addEventListener('click', () => {
+      document.getElementById('feedback').textContent = label === 'D'
+        ? 'Yes. D is included in X, Y, and Z, so changing D makes all three checks fail. One correct answer is a starting point; later we should try another example without the table.'
+        : 'Check which groups include ' + label + '. Would a single change there affect all three checks? Look for the bit used by X, Y, and Z.';
+    });
+    document.getElementById('quiz-choices').append(button);
+  });
+  render();
+</script>
+</body>
+</html>
